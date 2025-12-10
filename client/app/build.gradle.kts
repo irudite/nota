@@ -6,7 +6,14 @@
 
 plugins {
     id("buildlogic.java-application-conventions")
+    id("org.openjfx.javafxplugin") version "0.1.0"
 }
+
+javafx {
+    version = "25"
+    modules = listOf("javafx.controls")
+}
+
 
 dependencies {
     implementation("org.apache.commons:commons-text")
