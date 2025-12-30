@@ -1,5 +1,10 @@
 package org.example;
 
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
+
+@DynamoDbBean
 public class Note {
   // members
   private String noteId;
@@ -21,22 +26,28 @@ public class Note {
   }
   
   // getter methods
+  @DynamoDbPartitionKey
+  @DynamoDbAttribute("noteId")
   public String getNoteId() {
     return noteId;
   }
   
+  @DynamoDbAttribute("title")
   public String getTitle() {
     return title;
   }
   
+  @DynamoDbAttribute("content")
   public String getContent() {
     return content;
   }
   
+  @DynamoDbAttribute("createdAt")
   public Long getCreatedAt() {
     return createdAt;
   }
   
+  @DynamoDbAttribute("updatedAt")
   public Long getUpdatedAt() {
     return updatedAt;
   }

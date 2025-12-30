@@ -30,6 +30,8 @@ dependencies {
 
     // Use DynamoDB 
     implementation("software.amazon.awssdk:dynamodb:2.20.5")
+    implementation("com.amazonaws:aws-java-sdk-dynamodb:1.9.0")
+    implementation("software.amazon.awssdk:dynamodb-enhanced:2.21.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
