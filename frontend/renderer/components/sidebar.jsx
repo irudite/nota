@@ -5,25 +5,45 @@ import axios from 'axios';
 import { BsSearch } from 'react-icons/bs';
 import { AiFillFolderOpen } from 'react-icons/ai';
 import { AiOutlineClockCircle } from 'react-icons/ai'
+import { FaTrash } from "react-icons/fa";
 
 const Sidebar = () => {
   const [notes, setNotes] = useState([]);
   const [filtered, setFiltered] = useState(notes);
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    const getNotes = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/api/notes'); 
-        setNotes(response.data);
-      }
-      catch (error) {
-        console.error("Error fetching notes: ", error);  
-      }
+  const getNotes = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/notes'); 
+      setNotes(response.data);
+      setFiltered(response.data);
     }
+    catch (error) {
+      console.error("Error fetching notes: ", error);  
+    }
+  }
 
+  useEffect(() => {
     getNotes();
   })
+
+  const addNote = async () => {
+    const title = ""
+    const content = ""
+
+    await axios.post('http://localhost:8080/api/notes', {
+      title,
+      content
+    });
+  }
+
+  const deleteNote = async (id) => {
+    await axios.delete(`http://localhost:8080/api/notes/${id}`); 
+  }
+
+  const getNote = () => {
+
+  }
 
   const searchNote = (event) => {
     inputRef.current.value = event.target.value;
@@ -67,16 +87,19 @@ const Sidebar = () => {
       </div>
 
       {/* List */}
-      <div className="my-8">
-        <button className="rounded-lg w-full bg-accent border-border p-2 px-6 hover:opacity-90 active:scale-[0.98]"> + New Note </button>
+      <div className="my-8 overflow-y-auto">
+        <button className="rounded-lg w-full bg-accent border-border p-2 px-6 hover:opacity-90 active:scale-[0.98]" onClick={addNote}> + New Note </button>
         <div className="my-4">
           {filtered.sort((a, b) => b.updatedAt - a.updatedAt).map((note) => {
             return (
               <div className="my-2 p-2 border rounded-lg border-border bg-editor" key={note.noteId}>
                 <h3 className="text-muted font-serif">{note.title}</h3>
                 <div className="text-text flex items-center gap-2 mt-3 text-xs text-muted-foreground/70">
-                  <AiOutlineClockCircle></AiOutlineClockCircle>
+                  <AiOutlineClockCircle/>
                   <span className="text-sm text-text font-serif"> Last edited: {parseTimestamp(note.updatedAt)}</span>
+                  <a onClick={() => deleteNote(note.noteId)}>
+                    <FaTrash className="hover:text-red-400"/>
+                  </a>
                 </div>
               </div>
             )
