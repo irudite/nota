@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from 'react';
-
 import axios from 'axios';
 
 import { BsSearch } from 'react-icons/bs';
@@ -8,6 +7,7 @@ import { AiOutlineClockCircle } from 'react-icons/ai'
 import { FaTrash } from "react-icons/fa";
 
 const Sidebar = ({setSelectedNote}) => {
+
   const [notes, setNotes] = useState([]);
   const [filtered, setFiltered] = useState(notes);
   const inputRef = useRef(null);
@@ -44,19 +44,6 @@ const Sidebar = ({setSelectedNote}) => {
       }
 
       await axios.delete(`http://localhost:8080/api/notes/${id}`); 
-    }
-    catch (error) {
-      console.error("Error: " + error);
-    }
-  }
-
-  const getNote = async (id) => {
-    try {
-      if (!id) {
-        throw new Error("No id was passed to retrieve a note.");
-      }
-
-      const response = await axios.get(`http://localhost:8080/api/notes/${id}`); 
     }
     catch (error) {
       console.error(error);
@@ -110,20 +97,18 @@ const Sidebar = ({setSelectedNote}) => {
         <div className="my-4">
           {filtered.sort((a, b) => b.updatedAt - a.updatedAt).map((note) => {
             return (
-              <a onClick={() => {
-                if (notes.length === 0) {
-                  setSelectedNote(null);
-                }
-                else {
-                  setSelectedNote(note.noteId)
-                }
-              }}>
+              <a onClick={() => setSelectedNote(note.noteId)}>
                 <div className="my-2 p-2 border rounded-lg border-border bg-editor" key={note.noteId}>
                   <h3 className="text-muted font-serif">{note.title}</h3>
                   <div className="text-text flex items-center gap-2 mt-3 text-xs text-muted-foreground/70">
                     <AiOutlineClockCircle/>
                     <span className="text-sm text-text font-serif"> Last edited: {parseTimestamp(note.updatedAt)}</span>
-                    <a onClick={() => deleteNote(note.noteId)}>
+                    <a onClick={() => {
+                      if (notes.length === 1) {
+                        setSelectedNote(null)
+                      }
+                      deleteNote(note.noteId)
+                    }}>
                       <FaTrash className="hover:text-red-400"/>
                     </a>
                   </div>

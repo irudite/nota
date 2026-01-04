@@ -119,6 +119,7 @@ const Note = ({selectedNote}) => {
           className="w-full h-screen box-border px-8 py-6 bg-transparent text-text focus:outline-none resize-none leading-relaxed"
           placeholder="Start taking your notes here."
           onChange={updateContent}
+          value={note.content}
         >
           {note.content}
         </textarea>
